@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="DelishBites - Premium food delivery with chef-crafted meals using fresh ingredients. Order pizza, burgers, sushi & more!">
+  <meta name="keywords" content="food delivery, restaurant, meals, pizza, burgers, sushi, order food online">
+  <meta name="theme-color" content="#FF5A5F">
+  <title>DelishBites - Taste the Magic | Premium Food Delivery</title>
+  
+  <!-- Preload Critical Resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preload" href="https://images.unsplash.com/photo-1504674900247-0877df9cc836" as="image">
+  
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="/manifest.json">
+  
+  <style>
+    :root {
+      --primary: #ff5a5f;
+      --secondary: #ff9966;
+      --dark: #333;
+      --light: #fff9f2;
+      --white: #ffffff;
+      --text: #333;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.15);
+      --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+      --radius: 16px;
+    }
+
+    [data-theme="dark"] {
+      --primary: #ff7a7f;
+      --secondary: #ffaa66;
+      --dark: #f0f0f0;
+      --light: #1a1a1a;
+      --white: #222;
+      --text: #f0f0f0;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Open Sans', sans-serif;
+      background: linear-gradient(135deg, var(--light), var(--white));
+      color: var(--text);
+      line-height: 1.6;
+      scroll-behavior: smooth;
+      transition: background 0.5s ease;
+    }
+
+    /* Accessibility */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 4px;
+      z-index: 1000;
+      transition: top 0.3s;
+    }
+
+    .skip-link:focus {
+      top: 10px;
+    }
+
+    /* Header */
+    header {
+      height: 100vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), 
+                  url('https://images.unsplash.com/photo-1504674900247-0877df9cc836') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header h1 {
+      font-family: 'Pacifico', cursive;
+      font-size: clamp(3rem, 8vw, 5rem);
+      margin-bottom: 1rem;
+      text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.5);
+      animation: fadeInDown 1s ease-out;
+      z-index: 2;
+    }
+
+    header p {
+      font-size: clamp(1.25rem, 4vw, 1.75rem);
+      max-width: 800px;
+      padding: 0 1rem;
+      margin-bottom: 2rem;
+      animation: fadeInUp 1s ease-out 0.3s forwards;
+      opacity: 0;
+      z-index: 2;
+    }
+
+    /* 3D Floating Food Icons */
+    .floating-food {
+      position: absolute;
+      animation: float 15s linear infinite;
+      opacity: 0.8;
+      filter: drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.3));
+      z-index: 1;
+      will-change: transform;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-100vh) rotate(360deg); }
+    }
+
+    /* Buttons */
+    .btn {
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      color: white;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: var(--shadow-sm);
+      position: relative;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, var(--secondary), var(--primary));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .btn:hover::after {
+      opacity: 1;
+    }
+
+    /* Theme Toggle */
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+      transition: var(--transition);
+    }
+
+    .theme-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    section {
+      padding: 4rem 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .section-title {
+      font-size: clamp(2rem, 5vw, 3rem);
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+      text-align: center;
+      position: relative;
+      display: inline-block;
+    }
+
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, var(--primary), var(--secondary));
+      border-radius: 2px;
+    }
+
+    .section-text {
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      text-align: center;
+      color: var(--text);
+      opacity: 0.9;
+    }
+
+    /* Food Grid */
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+    }
+
+    .food-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: var(--transition);
+      position: relative;
+    }
+
+    .food-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .food-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+
+    .food-card:hover img {
+      transform: scale(1.05);
+    }
+
+    .food-info {
+      padding: 1.5rem;
+    }
+
+    .food-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .food-price {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .add-to-cart {
+      width: 100%;
+      padding: 0.75rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 600;
+    }
+
+    .add-to-cart:hover {
+      background: var(--secondary);
+    }
+
+    /* Features */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      transition: var(--transition);
+    }
+
+    .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
+    }
+
+    /* Cart Preview */
+    .cart-preview {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      background: var(--primary);
+      color: white;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 1000;
+      box-shadow: var(--shadow-md);
+      transition: var(--transition);
+    }
+
+    .cart-preview:hover {
+      transform: scale(1.1);
+    }
+
+    .cart-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      background: var(--secondary);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    /* Mobile Nav */
+    .mobile-nav {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--white);
+      border-radius: 50px;
+      padding: 12px;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      gap: 10px;
+      z-index: 1000;
+      display: none;
+    }
+
+    .mobile-nav a {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .mobile-nav a:hover {
+      transform: translateY(-5px);
+    }
+
+    /* Footer */
+    footer {
+      background: linear-gradient(45deg, var(--primary), var(--secondary));
+      color: white;
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    .footer-logo {
+      font-family: 'Pacifico', cursive;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .footer-links a:hover {
+      color: #ffdbdd;
+    }
+
+    .social-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .social-links a {
+      color: white;
+      font-size: 1.5rem;
+      transition: var(--transition);
+    }
+
+    .social-links a:hover {
+      transform: translateY(-5px);
+      color: #ffdbdd;
+    }
+
+    .copyright {
+      opacity: 0.8;
+      font-size: 0.9rem;
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .food-grid {
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      }
+
+      .mobile-nav {
+        display: flex;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .section {
+        padding: 3rem 1rem;
+      }
+
+      .features {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to Content -->
+  <a href="#main-content" class="skip-link">Skip to content</a>
+
+  <!-- Theme Toggle -->
+  <button class="theme-toggle" aria-label="Toggle dark mode">
+    <i class="fas fa-moon"></i>
+  </button>
+
+  <!-- Cart Preview -->
+  <div class="cart-preview" id="cartBtn" aria-label="View cart">
+    <i class="fas fa-shopping-cart"></i>
+    <span class="cart-count">0</span>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <img src="https://cdn-icons-png.flaticon.com/512/3480/3480652.png" class="floating-food" style="left: 10%; width: 60px; animation-delay: 0s;" alt="">
+    <img src="https://cdn-icons-png.flaticon.com/512/135/135620.png" class="floating-food" style="left: 40%; width: 50px; animation-delay: 3s;" alt="">
+    <img src="https://cdn-icons-png.flaticon.com/512/2718/2718224.png" class="floating-food" style="left: 70%; width: 70px; animation-delay: 6s;" alt="">
+    
+    <h1>DelishBites</h1>
+    <p>Taste the Magic of Fresh & Flavorsome Meals</p>
+    <button class="btn" onclick="document.getElementById('menu').scrollIntoView({ behavior: 'smooth' })">Explore Menu</button>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content">
+    <!-- Menu Section -->
+    <section id="menu">
+      <h2 class="section-title">Our Delicious Menu</h2>
+      <p class="section-text">Handcrafted with love using the freshest ingredients</p>
+      
+      <div class="food-grid">
+        <!-- Pizza -->
+        <div class="food-card">
+          <img src="1.jpeg" alt="Delicious wood-fired pizza" loading="lazy">
+          <div class="food-info">
+            <h3 class="food-title">Margherita Pizza</h3>
+            <p class="food-price">$12.99</p>
+            <button class="add-to-cart" data-id="1" data-name="Margherita Pizza" data-price="12.99">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Burger -->
+        <div class="food-card">
+          <img src="2.jpeg" alt="Juicy cheeseburger with fries" loading="lazy">
+          <div class="food-info">
+            <h3 class="food-title">Classic Burger</h3>
+            <p class="food-price">$9.99</p>
+            <button class="add-to-cart" data-id="2" data-name="Classic Burger" data-price="9.99">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Sushi -->
+        <div class="food-card">
+          <img src="3.jpeg" alt="Fresh sushi platter" loading="lazy">
+          <div class="food-info">
+            <h3 class="food-title">Sushi Combo</h3>
+            <p class="food-price">$15.99</p>
+            <button class="add-to-cart" data-id="3" data-name="Sushi Combo" data-price="15.99">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Pasta -->
+        <div class="food-card">
+          <img src="https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb" alt="Creamy fettuccine alfredo" loading="lazy">
+          <div class="food-info">
+            <h3 class="food-title">Fettuccine Alfredo</h3>
+            <p class="food-price">$11.99</p>
+            <button class="add-to-cart" data-id="4" data-name="Fettuccine Alfredo" data-price="11.99">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Salad -->
+        <div class="food-card">
+          <img src="https://images.unsplash.com/photo-1592861956120-e524fc739696" alt="Fresh garden salad" loading="lazy">
+          <div class="food-info">
+            <h3 class="food-title">Garden Salad</h3>
+            <p class="food-price">$8.99</p>
+            <button class="add-to-cart" data-id="5" data-name="Garden Salad" data-price="8.99">Add to Cart</button>
+          </div>
+        </div>
+        
+        <!-- Dessert -->
+        <div class="food-card">
+          <img src="cake.jpeg" alt="Chocolate lava cake" loading="lazy">
+          <div class="food-info">
+            <h3 class="food-title">Chocolate Lava Cake</h3>
+            <p class="food-price">$6.99</p>
+            <button class="add-to-cart" data-id="6" data-name="Chocolate Lava Cake" data-price="6.99">Add to Cart</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+      <h2 class="section-title">Why Choose DelishBites?</h2>
+      <p class="section-text">We're committed to delivering exceptional dining experiences</p>
+      
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-leaf"></i>
+          </div>
+          <h3>Fresh Ingredients</h3>
+          <p>Locally sourced, organic produce in every dish for maximum flavor and nutrition.</p>
+        </div>
+        
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-utensils"></i>
+          </div>
+          <h3>Chef Crafted</h3>
+          <p>Our award-winning chefs create innovative dishes that delight the senses.</p>
+        </div>
+        
+        <div class="feature">
+          <div class="feature-icon">
+            <i class="fas fa-bolt"></i>
+          </div>
+          <h3>Fast Delivery</h3>
+          <p>Get your food hot and fresh in 30 minutes or less, guaranteed.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">DelishBites</div>
+    
+    <div class="footer-links">
+      <a href="#menu">Menu</a>
+      <a href="#features">About Us</a>
+      <a href="#">Contact</a>
+      <a href="#">Careers</a>
+      <a href="#">FAQ</a>
+    </div>
+    
+    <div class="social-links">
+      <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+      <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+      <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+      <a href="#" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+    </div>
+    
+    <p class="copyright">&copy; 2025 DelishBites. All rights reserved.</p>
+  </footer>
+
+  <!-- Mobile Navigation -->
+  <nav class="mobile-nav">
+    <a href="#main-content" aria-label="Home"><i class="fas fa-home"></i></a>
+    <a href="#menu" aria-label="Menu"><i class="fas fa-utensils"></i></a>
+    <a href="#" aria-label="Favorites"><i class="fas fa-heart"></i></a>
+    <a href="#" aria-label="Cart"><i class="fas fa-shopping-cart"></i></a>
+  </nav>
+
+  <!-- Cart Modal (Hidden by default) -->
+  <div id="cartModal" style="display: none;">
+    <!-- Cart content would go here -->
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Theme Toggle
+      const themeToggle = document.querySelector('.theme-toggle');
+      const icon = themeToggle.querySelector('i');
+      
+      themeToggle.addEventListener('click', () => {
+        document.documentElement.setAttribute(
+          'data-theme',
+          document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light'
+        );
+        
+        icon.classList.toggle('fa-moon');
+        icon.classList.toggle('fa-sun');
+      });
+
+      // Cart Functionality
+      const cartBtn = document.getElementById('cartBtn');
+      const cartCount = document.querySelector('.cart-count');
+      const addToCartBtns = document.querySelectorAll('.add-to-cart');
+      let cartItems = [];
+      
+      // Load cart from localStorage
+      if (localStorage.getItem('cart')) {
+        cartItems = JSON.parse(localStorage.getItem('cart'));
+        updateCartCount();
+      }
+      
+      // Add to Cart
+      addToCartBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          const name = this.getAttribute('data-name');
+          const price = this.getAttribute('data-price');
+          
+          // Check if item already in cart
+          const existingItem = cartItems.find(item => item.id === id);
+          
+          if (existingItem) {
+            existingItem.quantity += 1;
+          } else {
+            cartItems.push({
+              id,
+              name,
+              price,
+              quantity: 1
+            });
+          }
+          
+          // Update UI
+          updateCartCount();
+          saveCart();
+          
+          // Animation feedback
+          this.textContent = 'Added!';
+          this.style.backgroundColor = '#4CAF50';
+          
+          setTimeout(() => {
+            this.textContent = 'Add to Cart';
+            this.style.backgroundColor = '';
+          }, 1000);
+        });
+      });
+      
+      // Update cart count
+      function updateCartCount() {
+        const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+        cartCount.textContent = totalItems;
+        
+        // Pulse animation
+        cartBtn.style.animation = 'pulse 0.5s ease';
+        setTimeout(() => {
+          cartBtn.style.animation = '';
+        }, 500);
+      }
+      
+      // Save cart to localStorage
+      function saveCart() {
+        localStorage.setItem('cart', JSON.stringify(cartItems));
+      }
+      
+      // Open cart modal
+      cartBtn.addEventListener('click', function() {
+        // In a real app, this would show the cart modal
+        alert(`You have ${cartItems.reduce((total, item) => total + item.quantity, 0)} items in your cart.`);
+      });
+      
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({
+            behavior: 'smooth'
+          });
+        });
+      });
+    });
+
+    // Register Service Worker for PWA
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').then(registration => {
+          console.log('ServiceWorker registration successful');
+        }).catch(err => {
+          console.log('ServiceWorker registration failed: ', err);
+        });
+      });
+    }
+  </script>
+</body>
+</html>
